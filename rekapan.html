@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rekapan Listrik - Pulsa KWH</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">⚡</span>
+        <span class="brand-text">KwhPulse</span>
+      </div>
+
+      <div class="sidebar-menu">
+        <div class="menu-label">Menu</div>
+        <a class="menu-item" href="dashboard.html">
+          <span class="menu-icon">▦</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-item active" href="rekapan.html">
+          <span class="menu-icon">☰</span>
+          <span>Rekapan</span>
+        </a>
+        <a class="menu-item" href="tarif.html">
+          <span class="menu-icon">◌</span>
+          <span>Tarif</span>
+        </a>
+      </div>
+
+      <div class="sidebar-card">
+        <span class="sidebar-card-label">Periode</span>
+        <span class="sidebar-card-date" id="sidebarMonth">September 2026</span>
+      </div>
+      <button class="secondary-button logout-button" id="logoutButton" type="button">Keluar</button>
+    </aside>
+
+    <main class="main-content">
+      <section class="topbar">
+        <div class="topbar-title">
+          <span class="today-label" id="todayDisplay">Hari ini, 10 Sep 2026</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="themeToggle">☼</button>
+        </div>
+      </section>
+
+      <section class="page-head">
+        <div>
+          <span class="section-kicker">Rekapitulasi Listrik</span>
+          <h1>Rekapan Penggunaan</h1>
+        </div>
+        <div class="page-actions">
+          <button class="secondary-button" id="downloadCsv">Export CSV</button>
+          <button class="secondary-button" id="clearHistory">Hapus Histori</button>
+        </div>
+      </section>
+
+      <section class="summary-grid summary-grid-3">
+        <article class="summary-card">
+          <div class="summary-card-top">
+            <span class="summary-label">Total Top Up</span>
+            <span class="summary-icon green">●</span>
+          </div>
+          <div class="summary-value" id="summaryTopup">0 kWh</div>
+          <div class="summary-foot">
+            <span class="summary-foot-label">pulsa awal</span>
+            <span class="summary-foot-trend up">●</span>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-card-top">
+            <span class="summary-label">Total Pemakaian</span>
+            <span class="summary-icon orange">◆</span>
+          </div>
+          <div class="summary-value" id="summaryUsageTotal">0 kWh</div>
+          <div class="summary-foot">
+            <span class="summary-foot-label">seluruh histori</span>
+            <span class="summary-foot-trend warn" id="usageTrend">●</span>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-card-top">
+            <span class="summary-label">Biaya Total</span>
+            <span class="summary-icon violet">✦</span>
+          </div>
+          <div class="summary-value" id="summaryCostTotal">Rp 0</div>
+          <div class="summary-foot">
+            <span class="summary-foot-label">rekapan biaya</span>
+            <span class="summary-foot-trend up">●</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel full-panel">
+        <div class="panel-head">
+          <div>
+            <span class="panel-label">Histori</span>
+            <h2>Daftar Rekapan</h2>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="rekapanTable">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Jenis</th>
+                <th>Top Up</th>
+                <th>Pemakaian</th>
+                <th>Sisa KWH</th>
+                <th>Biaya</th>
+              </tr>
+            </thead>
+            <tbody id="rekapanTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="main-grid bottom-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">KWH Terpakai</span>
+              <h2>Grafik Bulanan</h2>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-bars" id="chartBars"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Ringkasan</span>
+              <h2>Bulanan</h2>
+            </div>
+          </div>
+          <div class="monthly-summary" id="monthlySummary"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js?v=9"></script>
+</body>
+</html>
+</body>
+</html>

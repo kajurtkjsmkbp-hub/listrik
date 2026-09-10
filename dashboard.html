@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Listrik - Pulsa KWH</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">⚡</span>
+        <span class="brand-text">KwhPulse</span>
+      </div>
+
+      <div class="sidebar-menu">
+        <div class="menu-label">Menu</div>
+        <a class="menu-item active" href="dashboard.html">
+          <span class="menu-icon">▦</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-item" href="rekapan.html">
+          <span class="menu-icon">☰</span>
+          <span>Rekapan</span>
+        </a>
+        <a class="menu-item" href="tarif.html">
+          <span class="menu-icon">◌</span>
+          <span>Tarif</span>
+        </a>
+      </div>
+
+      <div class="sidebar-card">
+        <span class="sidebar-card-label">Periode</span>
+        <span class="sidebar-card-date" id="sidebarMonth">September 2026</span>
+      </div>
+      <button class="secondary-button logout-button" id="logoutButton" type="button">Keluar</button>
+    </aside>
+
+    <main class="main-content">
+      <section class="topbar">
+        <div class="topbar-title">
+          <span class="today-label" id="todayDisplay">Hari ini, 10 Sep 2026</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="themeToggle">☼</button>
+        </div>
+      </section>
+
+      <section class="page-head">
+        <div>
+          <span class="section-kicker">Sistem Monitoring Listrik</span>
+          <h1>Pengeluaran Listrik</h1>
+        </div>
+        <div class="page-actions">
+          <button class="secondary-button" id="resetButton">Reset Data</button>
+        </div>
+      </section>
+
+      <section class="summary-grid">
+        <article class="summary-card summary-card-primary">
+          <div class="summary-card-top">
+            <span class="summary-label">Sisa Pulsa</span>
+            <span class="summary-icon green">●</span>
+          </div>
+          <div class="summary-value" id="summaryRemaining">0 kWh</div>
+          <div class="summary-foot">
+            <span class="summary-foot-label">saldo saat ini</span>
+            <span class="summary-foot-trend up" id="remainingTrend">+0%</span>
+          </div>
+          <div class="summary-remaining-value" id="remainingRupiah">Rp 0 tersisa</div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-card-top">
+            <span class="summary-label">Total Pemakaian Hari Ini</span>
+            <span class="summary-icon orange">◆</span>
+          </div>
+          <div class="summary-period" id="summaryTodayDate">Kamis, 10 September 2026</div>
+          <div class="summary-value" id="summaryTodayUsage">0 kWh</div>
+          <div class="summary-foot">
+            <span class="summary-foot-label">total biaya hari ini</span>
+            <span class="summary-foot-trend" id="todayCost">Rp 0</span>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-card-top">
+            <span class="summary-label">Rata-rata Tingkat</span>
+            <span class="summary-icon blue">◍</span>
+          </div>
+          <div class="summary-value" id="summaryDailyAvg">0 kWh</div>
+          <div class="summary-foot">
+            <span class="summary-foot-label">rata-rata per hari</span>
+            <span class="summary-foot-trend up" id="dailyStatus">●</span>
+          </div>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-card-top">
+            <span class="summary-label">Estimasi Bulan Ini</span>
+            <span class="summary-icon violet">✦</span>
+          </div>
+          <div class="summary-period" id="summaryCurrentMonth">September 2026</div>
+          <div class="summary-value" id="summaryMonthlyCost">Rp 0</div>
+          <div class="summary-foot">
+            <span class="summary-foot-label" id="summaryMonthlyKwh">0 kWh</span>
+            <span class="summary-foot-trend up" id="monthlyStatus">proyeksi</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="main-grid">
+        <section class="panel lg-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Parameter dasar</span>
+              <h2>Tarif & Estimasi</h2>
+            </div>
+            <button class="icon-button small-icon" id="saveSettings">✓</button>
+          </div>
+
+          <div class="settings-form">
+            <div class="field-group">
+              <label for="tariffInput">Tarif KWH (Rp)</label>
+              <input type="number" id="tariffInput" value="1444" min="0" />
+            </div>
+            <div class="field-group">
+              <label for="monthDaysInput">Jumlah Hari Bulan</label>
+              <input type="number" id="monthDaysInput" value="30" min="1" />
+            </div>
+          </div>
+
+          <div class="mini-card-wrap">
+            <div class="mini-card">
+              <span class="mini-label">KWH per bulan</span>
+              <span class="mini-value" id="monthlyKwhEstimate">240 kWh</span>
+            </div>
+            <div class="mini-card">
+              <span class="mini-label">Biaya per bulan</span>
+              <span class="mini-value" id="monthlyCostEstimate">Rp 346.560</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Rangkuman</span>
+              <h2>Estimasi</h2>
+            </div>
+          </div>
+          <div class="estimate-card">
+            <div class="estimate-main">
+              <span class="estimate-kwh" id="estimateKwh">240 kWh</span>
+              <span class="estimate-type">estimasi per bulan</span>
+            </div>
+            <div class="estimate-bars" id="estimateBars">
+              <span style="height:40%"></span>
+              <span style="height:55%"></span>
+              <span style="height:72%"></span>
+              <span style="height:62%"></span>
+              <span style="height:80%"></span>
+              <span style="height:58%"></span>
+              <span style="height:68%"></span>
+            </div>
+          </div>
+          <div class="estimate-detail">
+            <span class="estimate-detail-label">Biaya estimasi</span>
+            <span class="estimate-detail-value" id="estimateCost">Rp 346.560</span>
+          </div>
+          <div class="estimate-detail annual-estimate-detail">
+            <span class="estimate-detail-label">Estimasi KWH tahunan</span>
+            <span class="estimate-detail-value" id="estimateAnnualKwh">2.880 kWh</span>
+          </div>
+          <div class="estimate-detail">
+            <span class="estimate-detail-label">Estimasi biaya tahunan</span>
+            <span class="estimate-detail-value" id="estimateAnnualCost">Rp 4.158.720</span>
+          </div>
+        </section>
+      </section>
+
+      <section class="main-grid forms-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Pulsa KWH</span>
+              <h2>Top Up</h2>
+            </div>
+          </div>
+          <form class="input-form" id="topupForm">
+            <div class="field-group">
+              <label for="topupDate">Tanggal</label>
+              <input type="date" id="topupDate" required />
+            </div>
+            <div class="field-group">
+              <label for="topupTime">Jam (otomatis)</label>
+              <input type="time" id="topupTime" readonly aria-readonly="true" />
+            </div>
+            <div class="field-group">
+              <label for="topupKwh">Jumlah Top Up KWH</label>
+              <input type="number" id="topupKwh" min="1" required />
+            </div>
+            <button type="submit" class="primary-button form-button">Tambah Top Up</button>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Pemakaian KWH</span>
+              <h2>Input Sisa KWH</h2>
+            </div>
+          </div>
+          <form class="input-form" id="usageForm">
+            <div class="field-group">
+              <label for="usageDate">Tanggal</label>
+              <input type="date" id="usageDate" required />
+            </div>
+            <div class="field-group">
+              <label for="usageTime">Jam (otomatis)</label>
+              <input type="time" id="usageTime" readonly aria-readonly="true" />
+            </div>
+            <div class="field-group">
+              <label for="remainingKwh">Sisa KWH</label>
+              <input type="number" id="remainingKwh" min="0" required />
+            </div>
+            <button type="submit" class="primary-button form-button">Hitung Pemakaian</button>
+          </form>
+        </section>
+      </section>
+
+      <section class="main-grid bottom-grid">
+        <section class="panel history-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Histori Transaksi</span>
+              <h2>Rekapan</h2>
+            </div>
+            <button class="secondary-button small-button" id="clearHistory">Hapus Histori</button>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+
+        <section class="panel monthly-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Ringkasan Bulanan</span>
+              <h2>Rekap Bulan</h2>
+            </div>
+          </div>
+          <div class="monthly-summary" id="monthlySummary"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js?v=9"></script>
+</body>
+</html>

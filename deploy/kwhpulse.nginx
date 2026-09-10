@@ -1,0 +1,18 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name _;
+    root /var/www/kwhpulse;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~* \.(?:css|js|html|png|jpg|jpeg|gif|svg|ico)$ {
+        expires 1h;
+        add_header Cache-Control "public";
+        try_files $uri =404;
+    }
+}

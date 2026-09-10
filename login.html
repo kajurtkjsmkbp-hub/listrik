@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Admin - Pulsa KWH</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="login-body">
+  <div class="login-wrapper">
+    <section class="login-card">
+      <div class="login-brand">
+        <span class="brand-icon login-brand-icon">⚡</span>
+        <span class="brand-text">KwhPulse</span>
+      </div>
+
+      <div class="login-head">
+        <span class="section-kicker">Admin Panel</span>
+        <h1>Masuk Dashboard</h1>
+      </div>
+
+      <form class="login-form" id="loginForm">
+        <div class="field-group">
+          <label for="usernameInput">Username</label>
+          <input type="text" id="usernameInput" autocomplete="username" required value="admin" />
+        </div>
+        <div class="field-group">
+          <label for="passwordInput">Password</label>
+          <input type="password" id="passwordInput" autocomplete="current-password" required value="admin123" />
+        </div>
+        <button class="primary-button form-button" type="submit">Masuk</button>
+        <div class="login-message" id="loginMessage"></div>
+      </form>
+
+      <div class="login-demo">
+        <span class="demo-user">Demo user: admin / admin123</span>
+      </div>
+    </section>
+  </div>
+
+  <script src="script.js?v=9"></script>
+</body>
+</html>

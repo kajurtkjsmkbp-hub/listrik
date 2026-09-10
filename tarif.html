@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarif Listrik - Pulsa KWH</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-icon">⚡</span>
+        <span class="brand-text">KwhPulse</span>
+      </div>
+
+      <div class="sidebar-menu">
+        <div class="menu-label">Menu</div>
+        <a class="menu-item" href="dashboard.html">
+          <span class="menu-icon">▦</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="menu-item" href="rekapan.html">
+          <span class="menu-icon">☰</span>
+          <span>Rekapan</span>
+        </a>
+        <a class="menu-item active" href="tarif.html">
+          <span class="menu-icon">◌</span>
+          <span>Tarif</span>
+        </a>
+      </div>
+
+      <div class="sidebar-card">
+        <span class="sidebar-card-label">Periode</span>
+        <span class="sidebar-card-date" id="sidebarMonth">September 2026</span>
+      </div>
+      <button class="secondary-button logout-button" id="logoutButton" type="button">Keluar</button>
+    </aside>
+
+    <main class="main-content">
+      <section class="topbar">
+        <div class="topbar-title">
+          <span class="today-label" id="todayDisplay">Hari ini, 10 Sep 2026</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="themeToggle">☼</button>
+        </div>
+      </section>
+
+      <section class="page-head">
+        <div>
+          <span class="section-kicker">Pengaturan</span>
+          <h1>Tarif & Basis KWH</h1>
+        </div>
+        <div class="page-actions">
+          <button class="secondary-button" id="resetButton">Reset Data</button>
+        </div>
+      </section>
+
+      <section class="main-grid">
+        <section class="panel lg-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Parameter</span>
+              <h2>Tarif Listrik</h2>
+            </div>
+            <button class="icon-button small-icon" id="saveSettings">✓</button>
+          </div>
+
+          <div class="settings-form">
+            <div class="field-group">
+              <label for="tariffInput">Tarif KWH (Rp)</label>
+              <input type="number" id="tariffInput" value="1444" min="0" />
+            </div>
+            <div class="field-group">
+              <label for="monthDaysInput">Jumlah Hari Bulan</label>
+              <input type="number" id="monthDaysInput" value="30" min="1" />
+            </div>
+          </div>
+
+          <div class="mini-card-wrap">
+            <div class="mini-card">
+              <span class="mini-label">KWH per bulan</span>
+              <span class="mini-value" id="monthlyKwhEstimate">240 kWh</span>
+            </div>
+            <div class="mini-card">
+              <span class="mini-label">Biaya per bulan</span>
+              <span class="mini-value" id="monthlyCostEstimate">Rp 346.560</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Formula</span>
+              <h2>Per Hitungan</h2>
+            </div>
+          </div>
+
+          <div class="formula-card">
+            <div class="formula-row">
+              <span class="formula-label">KWH per Bulan</span>
+              <span class="formula-value" id="formulaMonthlyKwh">KWH per Hari × Hari Bulan</span>
+            </div>
+            <div class="formula-row">
+              <span class="formula-label">Biaya Bulan</span>
+              <span class="formula-value" id="formulaMonthlyCost">KWH per Bulan × Tarif KWH</span>
+            </div>
+            <div class="formula-row">
+              <span class="formula-label">Pemakaian</span>
+              <span class="formula-value" id="formulaUsage">Top Up − Sisa KWH</span>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="main-grid bottom-grid">
+        <section class="panel full-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Parameter Aktif</span>
+              <h2>Profil Tarif</h2>
+            </div>
+          </div>
+          <div class="profile-list">
+            <div class="profile-row">
+              <span class="profile-label">Tarif KWH</span>
+              <span class="profile-value" id="profileTariff">Rp 1.444</span>
+            </div>
+            <div class="profile-row">
+              <span class="profile-label">KWH per Hari</span>
+              <span class="profile-value" id="profileDay">8 kWh</span>
+            </div>
+            <div class="profile-row">
+              <span class="profile-label">Hari Bulan</span>
+              <span class="profile-value" id="profileMonthDays">30 hari</span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js?v=9"></script>
+</body>
+</html>
+</body>
+</html>
