@@ -925,6 +925,10 @@ body.dark {
   height: 48px;
 }
 
+.install-button[hidden] {
+  display: none;
+}
+
 .login-message {
   min-height: 18px;
   color: var(--red);

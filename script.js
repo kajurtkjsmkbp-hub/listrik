@@ -9,6 +9,7 @@ const defaultState = {
 
 let state = loadState();
 let recordCounter = 1;
+let deferredInstallPrompt = null;
 
 const currencyFormatter = new Intl.NumberFormat('id-ID', {
   style: 'currency',
@@ -64,6 +65,7 @@ function setDefaultFormDates() {
 }
 
 function init() {
+  registerProgressiveWebApp();
   syncControls();
   setDefaultFormDates();
   const topupTime = document.getElementById('topupTime');
@@ -224,6 +226,20 @@ function bindEvents() {
     });
   }
 
+  const installButton = document.getElementById('installButton');
+  if (installButton) {
+    installButton.addEventListener('click', async () => {
+      if (!deferredInstallPrompt) {
+        return;
+      }
+
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      installButton.hidden = true;
+    });
+  }
+
   const logoutButton = document.getElementById('logoutButton');
   if (logoutButton) {
     logoutButton.addEventListener('click', () => {
@@ -241,6 +257,25 @@ function bindEvents() {
       window.location.href = 'login.html';
     }
   }
+}
+
+function registerProgressiveWebApp() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+
+  window.addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    const installButton = document.getElementById('installButton');
+    if (installButton) installButton.hidden = false;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    const installButton = document.getElementById('installButton');
+    if (installButton) installButton.hidden = true;
+    deferredInstallPrompt = null;
+  });
 }
 
 function generateId() {

@@ -10,6 +10,16 @@ python -m http.server 8000
 
 Buka `http://127.0.0.1:8000/`. Root otomatis diarahkan ke halaman login.
 
+## Instal sebagai aplikasi Android
+
+Project ini sudah disiapkan sebagai PWA. Agar tombol instalasi muncul di Chrome Android, website harus dibuka melalui HTTPS atau `localhost`.
+
+1. Buka URL website di Chrome Android.
+2. Tekan tombol `Instal Aplikasi` jika muncul, atau buka menu Chrome lalu pilih `Tambahkan ke layar utama`.
+3. Konfirmasi pemasangan.
+
+Untuk IP lokal LXC, gunakan HTTPS dengan domain atau sertifikat lokal. HTTP biasa pada alamat IP tidak selalu dianggap aman oleh Chrome Android.
+
 Demo login:
 
 - Username: `admin`
