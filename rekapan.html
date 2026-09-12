@@ -56,7 +56,13 @@
           <h1>Rekapan Penggunaan</h1>
         </div>
         <div class="page-actions">
+          <select class="period-select" id="rekapanMonthFilter" aria-label="Filter bulan rekapan">
+            <option value="all">Semua bulan</option>
+          </select>
           <button class="secondary-button" id="downloadCsv">Export CSV</button>
+          <button class="secondary-button" id="backupData">Backup Data</button>
+          <button class="secondary-button" id="restoreDataButton">Restore Data</button>
+          <input type="file" id="restoreDataInput" accept="application/json,.json" hidden />
           <button class="secondary-button" id="clearHistory">Hapus Histori</button>
         </div>
       </section>
@@ -149,7 +155,7 @@
     </main>
   </div>
 
-  <script src="script.js?v=10"></script>
+  <script src="script.js?v=11"></script>
 </body>
 </html>
 </body>

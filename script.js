@@ -21,6 +21,7 @@ const numberFormatter = new Intl.NumberFormat('id-ID');
 const kwhFormatter = new Intl.NumberFormat('id-ID', {
   maximumFractionDigits: 2
 });
+let selectedRecapMonth = 'all';
 
 function loadState() {
   const saved = localStorage.getItem(storageKey);
@@ -205,6 +206,55 @@ function bindEvents() {
   if (downloadCsv) {
     downloadCsv.addEventListener('click', () => {
       exportCsv();
+    });
+  }
+
+  const monthFilter = document.getElementById('rekapanMonthFilter');
+  if (monthFilter) {
+    monthFilter.addEventListener('change', () => {
+      selectedRecapMonth = monthFilter.value;
+      renderRekapanTable();
+    });
+  }
+
+  const backupData = document.getElementById('backupData');
+  if (backupData) {
+    backupData.addEventListener('click', () => {
+      const backup = {
+        app: 'KwhPulse',
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        data: state
+      };
+      downloadFile(JSON.stringify(backup, null, 2), `kwhpulse-backup-${getTodayISO()}.json`, 'application/json');
+    });
+  }
+
+  const restoreDataButton = document.getElementById('restoreDataButton');
+  const restoreDataInput = document.getElementById('restoreDataInput');
+  if (restoreDataButton && restoreDataInput) {
+    restoreDataButton.addEventListener('click', () => restoreDataInput.click());
+    restoreDataInput.addEventListener('change', async () => {
+      const file = restoreDataInput.files[0];
+      if (!file) return;
+
+      try {
+        const imported = JSON.parse(await file.text());
+        const importedState = imported.data || imported;
+        if (!Array.isArray(importedState.records)) throw new Error('Format backup tidak valid');
+        state = {
+          tariff: Number(importedState.tariff) || defaultState.tariff,
+          kwhPerDay: Number(importedState.kwhPerDay) || 0,
+          monthDays: Number(importedState.monthDays) || defaultState.monthDays,
+          records: importedState.records
+        };
+        saveState();
+        render();
+      } catch (error) {
+        window.alert('File backup tidak valid.');
+      } finally {
+        restoreDataInput.value = '';
+      }
     });
   }
 
@@ -542,12 +592,25 @@ function renderRekapanTable() {
     return;
   }
 
-  if (state.records.length === 0) {
+  const availableMonths = [...new Set(state.records.map(record => record.date?.slice(0, 7)).filter(Boolean))].sort().reverse();
+  const monthFilter = document.getElementById('rekapanMonthFilter');
+  if (monthFilter) {
+    monthFilter.innerHTML = '<option value="all">Semua bulan</option>' + availableMonths.map(month => `<option value="${month}">${formatMonth(Number(month.slice(5, 7)) - 1, Number(month.slice(0, 4))}</option>`).join('');
+    monthFilter.value = availableMonths.includes(selectedRecapMonth) ? selectedRecapMonth : 'all';
+    selectedRecapMonth = monthFilter.value;
+  }
+
+  const filteredRecords = selectedRecapMonth === 'all'
+    ? state.records
+    : state.records.filter(record => record.date?.slice(0, 7) === selectedRecapMonth);
+
+  if (filteredRecords.length === 0) {
     tableBody.innerHTML = `<tr><td colspan="6" class="empty-state">Belum ada data</td></tr>`;
+    renderRecapTotals([]);
     return;
   }
 
-  const sorted = [...state.records].sort((a, b) => getDateTimeStamp(b.date || getTodayISO(), b.time || '00:00') - getDateTimeStamp(a.date || getTodayISO(), a.time || '00:00'));
+  const sorted = [...filteredRecords].sort((a, b) => getDateTimeStamp(b.date || getTodayISO(), b.time || '00:00') - getDateTimeStamp(a.date || getTodayISO(), a.time || '00:00'));
   tableBody.innerHTML = sorted.map(record => {
     if (record.type === 'topup') {
       return `<tr>
@@ -570,22 +633,26 @@ function renderRekapanTable() {
     </tr>`;
   }).join('');
 
+  renderRecapTotals(filteredRecords);
+}
+
+function renderRecapTotals(records) {
   const summaryTopup = document.getElementById('summaryTopup');
   const summaryUsageTotal = document.getElementById('summaryUsageTotal');
   const summaryCostTotal = document.getElementById('summaryCostTotal');
 
   if (summaryTopup) {
-    const topups = state.records.filter(r => r.type === 'topup');
+    const topups = records.filter(r => r.type === 'topup');
     summaryTopup.textContent = `${numberFormatter.format(sumKwh(topups))} kWh`;
   }
 
   if (summaryUsageTotal) {
-    const usages = state.records.filter(r => r.type === 'usage');
+    const usages = records.filter(r => r.type === 'usage');
     summaryUsageTotal.textContent = `${numberFormatter.format(sumKwh(usages))} kWh`;
   }
 
   if (summaryCostTotal) {
-    const usages = state.records.filter(r => r.type === 'usage');
+    const usages = records.filter(r => r.type === 'usage');
     const totalCost = usages.reduce((sum, r) => sum + r.cost, 0);
     summaryCostTotal.textContent = currencyFormatter.format(totalCost);
   }
@@ -642,7 +709,10 @@ function renderTariffProfile() {
 
 function exportCsv() {
   const header = ['Tanggal', 'Jam', 'Jenis', 'TopUpKwh', 'PemakaianKwh', 'SisaKwh', 'Biaya'];
-  const rows = state.records.map(r => {
+  const records = selectedRecapMonth === 'all'
+    ? state.records
+    : state.records.filter(record => record.date?.slice(0, 7) === selectedRecapMonth);
+  const rows = records.map(r => {
     const type = r.type === 'topup' ? 'Top Up' : 'Pemakaian';
     const topUp = r.type === 'topup' ? r.kwh : '';
     const usage = r.type === 'usage' ? r.kwh : '';
@@ -652,11 +722,15 @@ function exportCsv() {
   });
 
   const csv = [header, ...rows].map(row => row.join(',')).join('\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  downloadFile(csv, `rekapan-kwh-${selectedRecapMonth}.csv`, 'text/csv;charset=utf-8;');
+}
+
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = 'rekapan-kwh.csv';
+  anchor.download = filename;
   document.body.appendChild(anchor);
   anchor.click();
   document.body.removeChild(anchor);

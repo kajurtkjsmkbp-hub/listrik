@@ -7,7 +7,7 @@ const appShell = [
   './rekapan.html',
   './tarif.html',
   './styles.css',
-  './script.js?v=10',
+  './script.js?v=11',
   './manifest.webmanifest',
   './icon.svg'
 ];
