@@ -258,6 +258,21 @@
     </main>
   </div>
 
-  <script src="script.js?v=11"></script>
+  <script>
+    (() => {
+      const now = new Date();
+      const localDate = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')].join('-');
+      const localTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const topupDate = document.getElementById('topupDate');
+      const usageDate = document.getElementById('usageDate');
+      const topupTime = document.getElementById('topupTime');
+      const usageTime = document.getElementById('usageTime');
+      if (topupDate && !topupDate.value) topupDate.value = localDate;
+      if (usageDate && !usageDate.value) usageDate.value = localDate;
+      if (topupTime && !topupTime.value) topupTime.value = localTime;
+      if (usageTime && !usageTime.value) usageTime.value = localTime;
+    })();
+  </script>
+  <script src="script.js?v=12"></script>
 </body>
 </html>
